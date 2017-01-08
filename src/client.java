@@ -50,6 +50,7 @@ public class client
 					Socket socket = new Socket(sentHost, sentToSocket); //接收SOCKET
 					//socket.setSoTimeout(2);
 					PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+					BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					System.out.println("連接成功");
 					while (disconnectFlag)
 					{
@@ -58,6 +59,8 @@ public class client
 						{
 							out.println(line);
 							line = "";
+							sleep(10);
+							View.displayGetMessage(in.readLine());
 							flag = false;
 						}
 					}

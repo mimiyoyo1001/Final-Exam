@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class View
@@ -20,6 +22,14 @@ public class View
 		Thread thread = new Thread();
 		JFrame frame = new JFrame("我的視窗");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				disconnectBtnOnClick();
+			}
+		});
 
 		frame.setSize(400, 200);
 		frame.setVisible(true);
@@ -45,11 +55,7 @@ public class View
 		frame.add(connectBtn, BorderLayout.LINE_START);
 		connectBtn.addActionListener(e ->
 		{
-			client.runClient();
-			setDisconnectBtnEnable(true);
-			setConnectBtnEnable(false);
-			setSendTextFieldEnable(true);
-			setSentBtnEnable(true);
+			connectBtnOnClick();
 		});
 
 		disconnectBtn = new JButton("中斷");
@@ -57,17 +63,30 @@ public class View
 		disconnectBtn.setEnabled(false);
 		disconnectBtn.addActionListener(e ->
 		{
-			client.disconnectFlag();
-			setDisconnectBtnEnable(false);
-			setConnectBtnEnable(true);
-			setSendTextFieldEnable(false);
-			setSentBtnEnable(false);
+			disconnectBtnOnClick();
 		});
 
 		getMessageTextField = new TextField("");
 		frame.add(getMessageTextField, BorderLayout.PAGE_END);
 		getMessageTextField.setEditable(false);
 		thread.start();
+	}
+	public static void connectBtnOnClick()
+	{
+		client.runClient();
+		setDisconnectBtnEnable(true);
+		setConnectBtnEnable(false);
+		setSendTextFieldEnable(true);
+		setSentBtnEnable(true);
+	}
+
+	public static void disconnectBtnOnClick()
+	{
+		client.disconnectFlag();
+		setDisconnectBtnEnable(false);
+		setConnectBtnEnable(true);
+		setSendTextFieldEnable(false);
+		setSentBtnEnable(false);
 	}
 	public static void setDisconnectBtnEnable(boolean bool)
 	{
